@@ -4,7 +4,7 @@
   <title>Experiments / WebRTC / getUserMedia</title>
 </head>
 <body>
-  <video id="video"></video>
+  <video id="video" autoplay="autoplay"></video>
   <button id="startbutton">Take photo</button>
   <canvas id="canvas"></canvas>
   <img src="http://placekitten.com/g/320/261" id="photo" alt="photo">
@@ -27,22 +27,38 @@
 
       navigator.getMedia(
           {
-            video: true,
-            audio: false
+            "audio": false, 
+            "video": true
           },
           function(stream) {
+            attachMediaStream(video, stream);
+            /*
             if (navigator.mozGetUserMedia) {
               video.mozSrcObject = stream;
             } else {
               var vendorURL = window.URL || window.webkitURL;
               video.src = vendorURL.createObjectURL(stream);
             }
+            */
             video.play();
           },
           function(err) {
             console.log("An error occured! " + err);
           }
       );
+
+      // Attach a media stream to an element.
+      function attachMediaStream(element, stream) {
+        if (typeof element.srcObject !== 'undefined') {
+          element.srcObject = stream;
+        } else if (typeof element.mozSrcObject !== 'undefined') {
+          element.mozSrcObject = stream;
+        } else if (typeof element.src !== 'undefined') {
+          element.src = URL.createObjectURL(stream);
+        } else {
+          console.log('Error attaching stream to element.');
+        }
+      };
 
       video.addEventListener('canplay', function(ev){
         if (!streaming) {
