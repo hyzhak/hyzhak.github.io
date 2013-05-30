@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Experiments / WebRTC / getUserMedia</title>
+  <title>Mobile Time-lapse</title>
+  <link href="css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <video id="video" autoplay="autoplay"></video>
-  <button id="startbutton">Take photo</button>
-  <canvas id="canvas"></canvas>
-  <img src="http://placekitten.com/g/320/261" id="photo" alt="photo">
+  <video id="video" class="full-screen"></video>
+  <div id="shots"></div>
+  <div class="shot">
+    <button id="startbutton">Take photo</button>
+    <canvas id="canvas" style="display: none"></canvas>
+  </div>
   <script>
     (function() {
 
@@ -15,7 +18,6 @@
           video        = document.querySelector('#video'),
           cover        = document.querySelector('#cover'),
           canvas       = document.querySelector('#canvas'),
-          photo        = document.querySelector('#photo'),
           startbutton  = document.querySelector('#startbutton'),
           width = 320,
           height = 0;
@@ -27,38 +29,22 @@
 
       navigator.getMedia(
           {
-            "audio": false, 
-            "video": true
+            video: true,
+            audio: false
           },
           function(stream) {
-            attachMediaStream(video, stream);
-            /*
             if (navigator.mozGetUserMedia) {
               video.mozSrcObject = stream;
             } else {
               var vendorURL = window.URL || window.webkitURL;
               video.src = vendorURL.createObjectURL(stream);
             }
-            */
             video.play();
           },
           function(err) {
             console.log("An error occured! " + err);
           }
       );
-
-      // Attach a media stream to an element.
-      function attachMediaStream(element, stream) {
-        if (typeof element.srcObject !== 'undefined') {
-          element.srcObject = stream;
-        } else if (typeof element.mozSrcObject !== 'undefined') {
-          element.mozSrcObject = stream;
-        } else if (typeof element.src !== 'undefined') {
-          element.src = URL.createObjectURL(stream);
-        } else {
-          console.log('Error attaching stream to element.');
-        }
-      };
 
       video.addEventListener('canplay', function(ev){
         if (!streaming) {
@@ -76,7 +62,10 @@
         canvas.height = height;
         canvas.getContext('2d').drawImage(video, 0, 0, width, height);
         var data = canvas.toDataURL('image/png');
+
+        var photo = document.createElement("img");
         photo.setAttribute('src', data);
+        document.getElementById("shots").appendChild(photo);
       }
 
       startbutton.addEventListener('click', function(ev){
@@ -85,20 +74,6 @@
       }, false);
 
     })();
-  </script>
-
-  <script type="text/javascript">
-
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-34050677-1']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-
   </script>
 </body>
 </html>
