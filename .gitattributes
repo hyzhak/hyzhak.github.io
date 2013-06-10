@@ -1,0 +1,5 @@
+*.swf -text -diff
+*.swc -text -diff
+*.exe -text -diff
+*.jpg -text -diff
+*.gif -text -diff
