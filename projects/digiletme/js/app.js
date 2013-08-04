@@ -3,7 +3,11 @@
  * Copyright (c) 2013, Eugene-Krevenets
  */
 
-var digiletme = angular.module('digiletme', ['ApiService']),
+var digiletme = angular.module('digiletme', [
+        'ApiService',
+        'leaflet-directive',
+        'Venues'
+    ]),
     CLIENT_ID = '2WYFEWX521WPPTCQ3MKLLEGAHOW3EHPGLF1H4KXDB5OCQYT5',
     CLIENT_SECRET = 'TJ0ORRJ4VPQFZHQ3USFLV2TVBYJRQ1O30ZY5RCNXL5SM23IF';
 
@@ -12,7 +16,7 @@ digiletme
         delete $httpProvider.defaults.headers.common["X-Requested-With"]
     }])
 
-digiletme.controller('SearchResultCtrl', ['$scope', 'Venue', '$http', '$resource', '$q', function($scope, Venue, $http, $resource, $q) {
+digiletme.controller('SearchResultCtrl', ['$scope', 'VenuesAPI', '$http', '$resource', '$q', '$location', function($scope, VenuesAPI, $http, $resource, $q, $location) {
     /*$scope.venues = Venue.query();
     $scope.budva = Venue.get({venueId: 'budva-bus-station'});*/
 
@@ -81,7 +85,9 @@ digiletme.controller('SearchResultCtrl', ['$scope', 'Venue', '$http', '$resource
     );
 
     $scope.venuesWithoutPhotos = [];
-    $scope.venues = getCurrentPosition()
+
+    $scope.venues = VenuesAPI.getLocalVenues();
+    /*$scope.venues = getCurrentPosition()
         .then(function (pos) {
             var c = pos.coords,
                 ll = "" + c.latitude + "," + c.longitude
@@ -91,7 +97,7 @@ digiletme.controller('SearchResultCtrl', ['$scope', 'Venue', '$http', '$resource
             //return $http.get('https://api.foursquare.com/v2/venues/search?ll=' + pos +
             return Venues.get({pos: pos, catetories: catetories.join(',')});
 //            return VenuesExplore.get({pos: pos, query: 'bus'});
-        });
+        });*/
 
     $scope.concat4SQImg = function(icon, width, height) {
         if (!icon.prefix || !icon.suffix) {
@@ -184,6 +190,10 @@ digiletme.controller('SearchResultCtrl', ['$scope', 'Venue', '$http', '$resource
                 } else {
                     cachedValue[venue.id] = GoogleReverseGeocoding.get({pos: venue.location.lat + ',' + venue.location.lng})
                         .$then(function(result) {
+                            if (result.data.results.length <= 0) {
+                                return 'unknown';
+                            }
+
                             cachedValue[venue.id] = result.data.results[0].formatted_address;
                             return cachedValue[venue.id];
                         });
@@ -192,6 +202,10 @@ digiletme.controller('SearchResultCtrl', ['$scope', 'Venue', '$http', '$resource
             return cachedValue[venue.id];
         };
     })();
+
+    $scope.$on('selectVenue', function(e, id) {
+        $location.hash(id);
+    });
 }]);
 
 /*digiletme.config(['FoursquareProvider', function(FoursquareProvider){
