@@ -66,6 +66,7 @@ body {
   width: 100%; }
   @media screen and (min-width: 641px) {
     .photos-preview-carousel {
+      overflow-x: hidden;
       height: 88px;
       max-height: 88px; } }
   @media screen and (max-width: 641px) {
@@ -74,24 +75,30 @@ body {
       white-space: nowrap;
       height: 96px;
       max-height: 96px; } }
-  .photos-preview-carousel .carousel-left-arrow {
-    left: 0;
-    position: absolute;
-    width: 32px;
-    height: 80px;
-    line-height: 80px;
-    text-align: center; }
-  .photos-preview-carousel .carousel-right-arrow {
-    right: 0;
-    position: absolute;
-    width: 32px;
-    height: 80px;
-    line-height: 80px;
-    text-align: center; }
 
-@media screen and (max-width: 641px) {
-  .photos-preview-carousel-collection {
-    width: 10000px; } }
+.carousel-left-arrow {
+  left: -32px;
+  position: absolute;
+  width: 32px;
+  height: 90px;
+  line-height: 90px;
+  text-align: center;
+  top: 0; }
+
+.carousel-right-arrow {
+  right: -32px;
+  position: absolute;
+  width: 32px;
+  height: 90px;
+  line-height: 90px;
+  text-align: center;
+  top: 0; }
+
+.photos-preview-carousel-collection {
+  width: 10000px; }
+  @media screen and (min-width: 641px) {
+    .photos-preview-carousel-collection {
+      overflow-x: hidden; } }
 
 .bottom-block {
   position: fixed;
@@ -130,3 +137,27 @@ body {
   margin: 32px auto;
   margin-top: 64px;
   margin-bottom: 64px; }
+
+.search-result .bg-with-progress-animation {
+  height: 100px;
+  background-color: #e7e7e7; }
+
+.bg-with-progress-animation {
+  width: 100%;
+  background: url("../img/loading.gif") no-repeat;
+  background-position: center center; }
+
+.imageHolder {
+  position: relative;
+  overflow: hidden; }
+
+.imageView {
+  position: absolute;
+  -webkit-transform: rotateZ(0); }
+
+.leaflet-control-my-location {
+  font: bold 18px "Lucida Console", Monaco, monospace; }
+
+.leaflet-touch .leaflet-control-my-location {
+  font-size: 22px;
+  line-height: 30px; }

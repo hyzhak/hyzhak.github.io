@@ -4,7 +4,8 @@
   <title>Digilet.me</title>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap-glyphicons.css"/>
-  <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css"/>
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+  <!--<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css"/>-->
   <link rel="stylesheet" type="text/css" media="screen" href="css/docs.css"/>
 
   <link rel="stylesheet" type="text/css" media="screen" href="css/style.css"/>
@@ -24,73 +25,55 @@
   <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 </head>
 <body>
+  <div ng-controller="RoutingCtrl"></div>
+  <div ng-view></div>
+
   <article class="map-result" ng-controller="MapCtrl">
-    <leaflet id="map" markers="markers" center="center" events="events">
-
+    <leaflet id="map" markers="markers" center="center" events="events" custom-controls="myCustomControls">
     </leaflet>
-    <!--<div id="map">
-
-    </div>-->
   </article>
 
-  <!--
-  <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
-  <script>
-    // create a map in the "map" div, set the view to a given place and zoom
-    var map = L.map('map').setView([51.505, -0.09], 13);
-
-    // add an OpenStreetMap tile layer
-
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
-    }).addTo(map);
-    setTimeout(function() {
-      window.scrollTo(0,1);
-    }, 1000);
-  </script>-->
-
-  <div class="search-result" ng-controller="SearchResultCtrl">
-    <section ng-repeat="venue in venues.response.venues" class="info-section" id="{{ venue.id }}">
-      <div ng-show="venue.visible">
-        <img ng-src="{{ concat4SQImg(venue.categories[0].icon) }}" style="float: left;margin: 16px"/>
+  <div class="search-result" ng-controller="SearchResultCtrl" ng-cloak>
+    <section ng-repeat="venue in venues" class="info-section" id="venue-{{ venue.id }}">
+      <div ng-show="venue.visible" ng-if="venue">
+        <a ng-href="#!/venue/{{ venue.id }}">
+          <img ng-src="{{ concat4SQImg(venue.categories[0].icon) }}" style="float: left;margin: 16px"/>
+        </a>
         <h3>{{ venue.name }}</h3>
         <!--<p>id: {{ venue.id }}</p>-->
         <!--<p>name: {{ venue.name }}</p>-->
-        <p>Adress: {{ getAddressOfVenue(venue) }}</p>
+        <p>Address: {{ getAddressOfVenue(venue) }}, <a ng-href="{{ venue.canonicalUrl }}">add photos by 4sq</a></p>
+
         <!--<p>country: {{ venue.location.country }}</p>-->
         <!--<p>location: {{ venue.location.lat }}, {{ venue.location.lng }}</p>
         <p>categories: {{ venue.categories[0].name }}</p>-->
 
 
         <!--<div ng-repeat="venueImagesGroup in getVenueById(venue.id).response.venue.photos.groups">-->
-          <div class="photos-preview-carousel">
-            <div class="photos-preview-carousel-collection">
-              <div ng-repeat="venueImage in getPhotosOfVenue(venue)" class="photo-border">
-                <div ng-style="getDivStyleFor4SQImg(venueImage, 100, 100)" class="photo-small-preview">
-                  <div class="actions">
-                    <a href="#!" class="btn btn-primary btn-small"> <span class="glyphicon glyphicon-star"></span></a> <!--Fav-->
-                    <a href="#!" class="btn btn-primary btn-small"> <span class="glyphicon glyphicon-zoom-in"></span></a> <!--Fav-->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <carousel data="getPhotosOfVenue(venue)" venue="venue" preview-width="100" preview-height="100">
+          </carousel>
         <!--</div>-->
       </div>
     </section>
 
-    <section ng-show="venuesWithoutPhotos.length > 0">
+    <section ng-show="hasVenuesWithoutPhotos" ng-cloak>
       <h1>Need to add photos</h1>
       <ul>
-        <li ng-repeat="venue in venuesWithoutPhotos">
-          <a ng-href="{{ venue.canonicalUrl }}">
-            {{ venue.name }} / {{ getAddressOfVenue(venue) }}
-          </a>
-        </li>
+        <div ng-repeat="venue in venuesWithoutPhotos">
+          <li ng-if="venue">
+            <a ng-href="{{ venue.canonicalUrl }}" target="_blank">
+              {{ venue.name }} / {{ getAddressOfVenue(venue) }}
+            </a>
+          </li>
+        </div>
       </ul>
     </section>
+    <section ng-show="waitForVenuesWithPhotos">
+      <div class="bg-with-progress-animation text-center">
+          Loading...
+      </div>
+    </section>
   </div>
-
   <article class="welcome-page">
     <h1>Welcome!</h1>
     <p>
@@ -112,6 +95,8 @@
       Thanks for your time, see you!
     </p>
   </article>
+
+
 
   <article class="welcome-page">
     <h1>Добро пожаловать!</h1>
@@ -148,20 +133,44 @@
     </div>
   </article>
 
+  <article class="statistics" ng-controller="StatisticsCtrl">
+      <div>
+          Requests to FourSquare: {{ numOfRequest }}
+      </div>
+  </article>
+
+  <script src="js/requestAnimFrame.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular.js"></script>
+  <script src="http://code.angularjs.org/1.2.0rc1/angular-route.js"></script>
+  <script src="http://code.angularjs.org/1.2.0rc1/angular-resource.js"></script>
   <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>-->
-  <script src="bower_components/angular-unstable/angular.js"></script>
+  <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.js"></script>-->
+  <!--<script src="bower_components/angular-unstable/angular.js"></script>-->
   <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular-resource.min.js"></script>-->
-  <script src="bower_components/angular-resource-unstable/angular-resource.js"></script>
+  <!--<script src="bower_components/angular-resource-unstable/angular-resource.js"></script>-->
 
-  <script src="bower_components/q/q.js"></script>
+  <script src="bower_components/hammerjs/dist/hammer.js"></script>
+  <script src="bower_components/hammerjs/plugins/hammer.showtouches.js"></script>
+  <script src="bower_components/hammerjs/plugins/hammer.fakemultitouch.js"></script>
+  <!--<script src="bower_components/angular-hammer/angular-hammer.js"></script>-->
+  <script src="libs/angular-hammer.js"></script>
 
+  <!--<script src="libs/leaflet-src.js"></script>-->
   <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
-  <script src="bower_components/angular-leaflet/dist/angular-leaflet-directive.min.js"></script>
+  <!--<script src="bower_components/angular-leaflet/dist/angular-leaflet-directive.min.js"></script>-->
+  <script src="bower_components/angular-leaflet/src/angular-leaflet-directive.js"></script>
 
   <script src="js/api.js"></script>
+  <script src="js/foursquare.js"></script>
   <script src="js/venues.js"></script>
+  <script src="js/foursquarePhoto.js"></script>
+  <script src="js/carousel.js"></script>
+  <script src="js/location.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/photo.js"></script>
   <script src="js/map.js"></script>
+  <script src="js/stat.js"></script>
+  <script src="js/smartip.js"></script>
 
   <!-- JavaScript plugins (requires jQuery) -->
   <script src="http://code.jquery.com/jquery.js"></script>

@@ -11,5 +11,6 @@
     "commit": "921a46b5a65cddbe223f1e0c4e0e4588a5b6c47c"
   },
   "_source": "git://github.com/johannestroeger/bower-angular-unstable.git",
-  "_target": "1.1.5"
+  "_target": "~1.1.5",
+  "_originalSource": "angular-unstable"
 }

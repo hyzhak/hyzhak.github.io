@@ -10,11 +10,14 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.0.0-rc1",
-    "angular": "~1.0.7",
-    "angular-resource": "~1.0.7",
+    "bootstrap": "3.0.0",
+    "angular": "~1.2.0",
+    "angular-resource": "~1.2.0",
     "angular-resource-unstable": "~1.1.5",
     "angular-unstable": "~1.1.5",
-    "angular-leaflet": "~0.5.1"
+    "angular-leaflet": "~0.6.0",
+    "hammerjs": "~1.0.5",
+    "angular-hammer": "monospaced/angular-hammer#~1.0.1",
+    "leaflet": "~0.6.4"
   }
 }

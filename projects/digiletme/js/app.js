@@ -4,100 +4,159 @@
  */
 
 var digiletme = angular.module('digiletme', [
+        'ngRoute',
         'ApiService',
         'leaflet-directive',
-        'Venues'
-    ]),
-    CLIENT_ID = '2WYFEWX521WPPTCQ3MKLLEGAHOW3EHPGLF1H4KXDB5OCQYT5',
-    CLIENT_SECRET = 'TJ0ORRJ4VPQFZHQ3USFLV2TVBYJRQ1O30ZY5RCNXL5SM23IF';
+        'FourSquare',
+        'Carousel',
+        'SmartIP',
+        'hmTouchevents',
+        'Location'
+    ]);
 
 digiletme
-    .config(['$httpProvider', function($httpProvider) {
-        delete $httpProvider.defaults.headers.common["X-Requested-With"]
-    }])
+    .config(['$locationProvider', '$routeProvider', 'LocationProvider', function($locationProvider, $routeProvider, Location) {
+        'use strict';
 
-digiletme.controller('SearchResultCtrl', ['$scope', 'VenuesAPI', '$http', '$resource', '$q', '$location', function($scope, VenuesAPI, $http, $resource, $q, $location) {
-    /*$scope.venues = Venue.query();
-    $scope.budva = Venue.get({venueId: 'budva-bus-station'});*/
+        $locationProvider.hashPrefix('!');
 
-
-    var getCurrentPosition = (function() {
-        return function () {
-            var defer = $q.defer();
-            navigator.geolocation.getCurrentPosition(function (pos) {
-                defer.resolve(pos);
-                $scope.$digest();
-            }, function(error) {
-                console.log(error);
-                defer.reject(error);
+        $routeProvider
+            .when('/location/:zoom?/:lat?/:lng?/:venueId?', {
+                action: 'location',
+                template: ''
+            })
+            .when('/venue/:venueId?', {
+                action: 'venue',
+                template: '',
+                resolve: {
+                    'Location': 'Location'
+                }
+                /*,
+                redirectTo: function(pathParams) {
+                    return Location.getLocation().then(function(location) {
+                        return 'location/' + location.zoom + '/' + location.lat + '/' + location.lng + '/' + pathParams.venueId;
+                    });
+                }*/
+            })
+            .when('/photos/:venueId/:photoId', {
+                action: 'photo',
+                templateUrl: 'partials/photoPartial.html',
+                controller: 'PhotoCtrl'
+            })
+            .otherwise({
+                redirectTo: 'location/'
             });
-            return defer.promise;
+    }])
+    .constant('')
+    .run(['FourSquareClient', function(FourSquareClient) {
+        FourSquareClient.CLIENT_ID = '2WYFEWX521WPPTCQ3MKLLEGAHOW3EHPGLF1H4KXDB5OCQYT5';
+        FourSquareClient.CLIENT_SECRET = 'TJ0ORRJ4VPQFZHQ3USFLV2TVBYJRQ1O30ZY5RCNXL5SM23IF';
+    }]);
+
+digiletme.controller('PhotosPreviewCarouselCtrl', ['$scope', function() {
+
+}]);
+
+digiletme.controller('RoutingCtrl', ['$scope', '$rootScope', 'VenuesAPI', 'Location', '$http', '$resource', '$q', '$location', '$timeout', '$window', function($scope, $rootScope, VenuesAPI, Location, $http, $resource, $q, $location, $timeout, $window) {
+    'use strict';
+
+    var storedScrollY = 0;
+
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {
+        document.body.style.overflowY = 'auto';
+        if (storedScrollY) {
+            $window.scrollTo(0, storedScrollY);
+            storedScrollY = 0;
+            $timeout(function() {
+            }, 100);
         }
-    })();
 
-//    '4d4b7105d754a06379d81259'  //Путешествия и транспорт
-    var catetories = [
-//        '4bf58dd8d48988d1ed931735', //Аэропорт / Аэропорт
-//        '4e4c9077bd41f78e849722f9', //Велопрокат / Велопрокат
-        '4bf58dd8d48988d1fe931735', //Автовокзал / Автовокзал
-//        '4e51a0c0bd41d3446defbb2e', //Паром / Паром
-//        '4bf58dd8d48988d1f6931735', //Путешествия - Общее / Путешествия ?
-//        '4bf58dd8d48988d1fc931735', //Легкорельсовая линия / Легкорельсовая линия
-//        '4f2a23984b9023bd5841ed2c', //Подвижный объект / Подвижный объект
-//        '4bf58dd8d48988d1ef941735', //Автопрокат / Автопрокат
-//        '4bf58dd8d48988d1f9931735', //Дорога / Дорога
-//        '4bf58dd8d48988d1fd931735', //Метро / Метро
-//        '4bf58dd8d48988d130951735', //Такси / Такси
-//        '4f4530164b9074f6e4fb00ff', //Справочный пункт / Справочный пункт
-//        '4bf58dd8d48988d129951735', //Железнодорожный вокзал / Железнодорожный вокзал
-    ];
-
-    var Venues = $resource(
-        'https://api.foursquare.com/v2/venues/search' +
-        '?ll=:pos' +
-        '&intent=browse' +
-        '&limit=:limit' +
-        '&radius=:radius' +
-        '&categoryId=:catetories' +
-        '&client_id=' + CLIENT_ID +
-        '&client_secret=' + CLIENT_SECRET +
-        '&v=20130803', {
-            limit: 50,
-            radius: 100000
+        if (!next) {
+            return;
         }
-    );
 
-    var VenuesExplore = $resource(
-        'https://api.foursquare.com/v2/venues/explore' +
-        '?ll=:pos' +
-        '&query=:query' +
-        '&limit=:limit' +
-        '&radius=:radius' +
-        '&offset=:offset' +
-        '&venuePhotos=1' +
-        '&client_id=' + CLIENT_ID +
-        '&client_secret=' + CLIENT_SECRET +
-        '&v=20130803', {
-            limit: 50,
-            offset: 0,
-            radius: 100000
+        switch(next.action) {
+            case 'venue':
+                Location.getLocation().then(function(location) {
+                    $location.path('location/' + location.zoom + '/' + location.lat + '/' + location.lng + '/' + next.params.venueId);
+                });
+                break;
+            case 'photo':
+                $rootScope.$broadcast('selectPhoto', next.params.photoId);
+                document.body.style.overflowY = 'hidden';
+                storedScrollY = $window.scrollY;
+                break;
+            case 'location':
+                if (next.params.hasOwnProperty('lat') &&
+                    next.params.hasOwnProperty('lng') &&
+                    next.params.hasOwnProperty('zoom')) {
+                    Location.setLocation(Number(next.params.lat), Number(next.params.lng), Number(next.params.zoom));
+                }
+
+                if (next.params.venueId) {
+                    $rootScope.$broadcast('selectVenue', next.params.venueId);
+                }
+                break;
+            default:
+                break;
         }
-    );
+    });
+}]);
 
-    $scope.venuesWithoutPhotos = [];
+digiletme.controller('SearchResultCtrl', ['$scope', '$rootScope', 'VenuesAPI', 'Location', '$http', '$resource', '$q', '$location', '$timeout', '$window', function($scope, $rootScope, VenuesAPI, Location, $http, $resource, $q, $location, $timeout, $window) {
+    'use strict';
 
-    $scope.venues = VenuesAPI.getLocalVenues();
-    /*$scope.venues = getCurrentPosition()
-        .then(function (pos) {
-            var c = pos.coords,
-                ll = "" + c.latitude + "," + c.longitude
-            return ll;
-        })
-        .then(function (pos) {
-            //return $http.get('https://api.foursquare.com/v2/venues/search?ll=' + pos +
-            return Venues.get({pos: pos, catetories: catetories.join(',')});
-//            return VenuesExplore.get({pos: pos, query: 'bus'});
-        });*/
+    $scope.hasVenuesWithoutPhotos = false;
+    $scope.venuesWithoutPhotos = {};
+    $scope.venues = {};
+    $scope.waitForVenuesWithPhotos = true;
+    VenuesAPI.getLocalVenues().then(function(resource) {
+        $scope.waitForVenuesWithPhotos = false;
+    });
+
+    $rootScope.$on('showVenue', function(e, venue) {
+        if ($scope.venues[venue.id]) {
+            return;
+        }
+
+        $scope.venues[venue.id] = venue;
+    });
+
+    $rootScope.$on('hideVenue', function(e, venue) {
+        if (!$scope.venues[venue.id]) {
+            return;
+        }
+
+        $scope.venues[venue.id] = null;
+    });
+
+    $rootScope.$on('showVenueWithoutPhoto', function(e, venue) {
+        if ($scope.venuesWithoutPhotos[venue.id]) {
+            return;
+        }
+
+        $scope.venuesWithoutPhotos[venue.id] = venue;
+        $scope.hasVenuesWithoutPhotos = true;
+    });
+
+    $rootScope.$on('hideVenueWithoutPhoto', function(e, venue) {
+        if (!$scope.venuesWithoutPhotos[venue.id]) {
+            return;
+        }
+
+        $scope.venuesWithoutPhotos[venue.id] = null;
+//        $scope.hasVenuesWithoutPhotos = true;
+    });
+/*
+    $rootScope.$on('newVenueWithoutPhotos', function(e, venue) {
+        if ($scope.venuesWithoutPhotos[venue.id]) {
+            return;
+        }
+
+        $scope.venuesWithoutPhotos[venue.id] = venue;
+        $scope.hasVenuesWithoutPhotos = true;
+    });*/
+
 
     $scope.concat4SQImg = function(icon, width, height) {
         if (!icon.prefix || !icon.suffix) {
@@ -121,54 +180,33 @@ digiletme.controller('SearchResultCtrl', ['$scope', 'VenuesAPI', '$http', '$reso
     };
 
     $scope.getPhotosOfVenue = (function() {
-        var cachedValue = {};
+        var cachedRequest = {},
+            cachedValue = {};
         return function(venue) {
-            if (!cachedValue[venue.id]) {
-                cachedValue[venue.id] = getPhotos(venue.id)
-                    .then(function(result) {
-                        cachedValue[venue.id] = result;
+            if (cachedValue[venue.id]) {
+                var photos = cachedValue[venue.id];
+                venue.visible = photos.length > 0;
+                return $q.when(photos);
+            }
 
+            if (!cachedRequest[venue.id]) {
+                cachedRequest[venue.id] = VenuesAPI.getPhotosByVenueId(venue.id)
+                    .then(function(result) {
+                        cachedRequest[venue.id] = null;
+                        cachedValue[venue.id] = result;
                         var hasPhotos = result.length > 0;
                         venue.visible = hasPhotos;
-                        if (!hasPhotos) {
+                        /*if (!hasPhotos) {
                             $scope.venuesWithoutPhotos.push(venue);
-                        }
+                        }*/
+
+                        return result;
                     });
             }
 
-            return cachedValue[venue.id];
+            return cachedRequest[venue.id];
         };
     })();
-
-    function getPhotos(id) {
-        return $scope.getVenueById(id)
-            .$then(function(result) {
-                var photos = [];
-                var groups = result.data.response.venue.photos.groups;
-                for(var i = 0, count = groups.length; i < count; i++) {
-                    var items = groups[i].items;
-                    for(var j = 0, jCount = items.length; j < jCount; j++) {
-                        photos.push(items[j]);
-                    }
-                }
-
-                return photos;
-            });
-    }
-
-    var Venue = $resource('https://api.foursquare.com/v2/venues/:venueId' +
-        '?client_id=' + CLIENT_ID +
-        '&client_secret=' + CLIENT_SECRET +
-        '&v=20130803');
-
-    var cachedVenue = {};
-    $scope.getVenueById = function(id) {
-        if (!cachedVenue[id]) {
-            cachedVenue[id] = Venue.get({venueId: id});
-        }
-
-        return cachedVenue[id];
-    };
 
     var GoogleReverseGeocoding = $resource(
         'http://maps.googleapis.com/maps/api/geocode/json' +
@@ -179,8 +217,9 @@ digiletme.controller('SearchResultCtrl', ['$scope', 'VenuesAPI', '$http', '$reso
 
     });
 
+
     $scope.getAddressOfVenue =(function() {
-        var cachedValue = {}
+        var cachedValue = {};
         return function(venue) {
             if (!cachedValue[venue.id]) {
                 if (venue.location.city) {
@@ -189,12 +228,12 @@ digiletme.controller('SearchResultCtrl', ['$scope', 'VenuesAPI', '$http', '$reso
                         (venue.location.country?venue.location.country:'');
                 } else {
                     cachedValue[venue.id] = GoogleReverseGeocoding.get({pos: venue.location.lat + ',' + venue.location.lng})
-                        .$then(function(result) {
-                            if (result.data.results.length <= 0) {
+                        .$promise.then(function(resource) {
+                            if (resource.results.length <= 0) {
                                 return 'unknown';
                             }
 
-                            cachedValue[venue.id] = result.data.results[0].formatted_address;
+                            cachedValue[venue.id] = resource.results[0].formatted_address;
                             return cachedValue[venue.id];
                         });
                 }
@@ -204,26 +243,58 @@ digiletme.controller('SearchResultCtrl', ['$scope', 'VenuesAPI', '$http', '$reso
     })();
 
     $scope.$on('selectVenue', function(e, id) {
-        $location.hash(id);
+        //$location.hash(id);
+        var elm = document.querySelector('#' + 'venue-' + id),
+            box = elm.getBoundingClientRect(),
+            pos = box.top + window.scrollY - 250;
+        //window.scrollTo(0, pos);
+        scrollToAnimation(pos);
+    });
+
+    var previousScroll = {};
+
+    function scrollToAnimation(pos) {
+        var scrollIteration = buildScrollIteration(pos);
+        requestAnimFrame(scrollIteration);
+        previousScroll.inProgress = false;
+        previousScroll = scrollIteration;
+    }
+
+    window.addEventListener('scroll', function() {
+        if (lastSetScrollY !== window.scrollY) {
+            previousScroll.inProgress = false;
+        }
+    });
+
+    var lastSetScrollY;
+
+    function buildScrollIteration(pos) {
+        if (pos < 0) {
+            pos = 0;
+        }
+        var iteration = function() {
+            var delta = window.scrollY - pos,
+                step = 10;
+
+            if (-step < delta && delta < step || !iteration.inProgress) {
+                lastSetScrollY = Math.round(pos);
+            } else {
+                lastSetScrollY = Math.round(window.scrollY - delta/step);
+                requestAnimFrame(iteration);
+            }
+            window.scrollTo(0, lastSetScrollY);
+        };
+
+        iteration.inProgress = true;
+
+        return iteration;
+    }
+
+    $scope.$on('selectMarkerOnMap', function(e, id) {
+        var path = 'venue/' + id;
+        $location.path(path);
     });
 }]);
 
-/*digiletme.config(['FoursquareProvider', function(FoursquareProvider){
-    FoursquareProvider.token = '2WYFEWX521WPPTCQ3MKLLEGAHOW3EHPGLF1H4KXDB5OCQYT5';
-}]);*/
-
-/*
-digiletme.controller('SearchResultCtrl', ['$scope', 'Foursquare', function($scope, Foursquare) {
-    'use strict';
-    */
-/*$scope.user = Foursquare.Users.get({
-        userId: 'self'
-    });*//*
-
-
-    navigator.geolocation.getCurrentPosition(function (pos) {
-        $scope.$apply(function () {
-            $scope.venues = Foursquare.search(pos)
-        })
-    });
-}]);*/
+//Hammer.plugins.fakeMultitouch();
+Hammer.plugins.showTouches();

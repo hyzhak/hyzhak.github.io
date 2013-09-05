@@ -2,12 +2,16 @@
 
 $preview-width: 80px
 $preview-height: 80px
+$preview-height-total: 90px
 $active-color: #f47daf
 
 $break-mobile: 641px
 
 $carousel-height-mobile: $preview-height + 16
 $carousel-height-desktop: $preview-height + 8
+
+$photoBackgroundColor: #222
+$searchResultBackgroundColor: #e7e7e7
 
 /* Styles */
 
@@ -84,16 +88,17 @@ body
 @mixin preview-carousel-arrow
   position: absolute
   width: 32px
-  height: $preview-height
-  line-height: $preview-height
+  height: $preview-height-total
+  line-height: $preview-height-total
   text-align: center
-
+  top: 0
 
 
 .photos-preview-carousel
   overflow-y: hidden
   width: 100%
   @media screen and (min-width: $break-mobile)
+    overflow-x: hidden
     height: $carousel-height-desktop
     max-height: $carousel-height-desktop
   @media screen and (max-width: $break-mobile)
@@ -101,16 +106,18 @@ body
     white-space: nowrap
     height: $carousel-height-mobile
     max-height: $carousel-height-mobile
-  .carousel-left-arrow
-    left: 0
-    @include preview-carousel-arrow
-  .carousel-right-arrow
-    right: 0
-    @include preview-carousel-arrow
+
+.carousel-left-arrow
+  left: -32px
+  @include preview-carousel-arrow
+.carousel-right-arrow
+  right: -32px
+  @include preview-carousel-arrow
 
 .photos-preview-carousel-collection
-  @media screen and (max-width: $break-mobile)
-    width: 10000px
+  width: 10000px
+  @media screen and (min-width: $break-mobile)
+    overflow-x: hidden
 
 .bottom-block
   position: fixed
@@ -151,3 +158,27 @@ body
   @include common-page
   margin-top: 64px
   margin-bottom: 64px
+
+.search-result .bg-with-progress-animation
+  height: 100px
+  background-color: $searchResultBackgroundColor
+
+.bg-with-progress-animation
+  width: 100%
+  background: url("../img/loading.gif") no-repeat
+  background-position: center center
+
+.imageHolder
+  position: relative
+  overflow: hidden
+
+.imageView
+  position: absolute
+  -webkit-transform: rotateZ(0)
+
+.leaflet-control-my-location
+  font: bold 18px 'Lucida Console', Monaco, monospace
+
+.leaflet-touch .leaflet-control-my-location
+  font-size: 22px
+  line-height: 30px
