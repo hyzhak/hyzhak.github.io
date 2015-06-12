@@ -1,5 +1,488 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>darling.js</title><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta name="description"><meta name="keywords" content="game dev, javascript, node.js, python, opensource"><meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"><meta name="google-site-verification" content="-WuDSQXcQ3LYVkL0N9vaxK-5xrxXS4I-nB9t5qreNjU"><link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"><link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"><link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet"><link href="/css/main.css" rel="stylesheet"></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-shrink"><div class="container-fluid"><div class="navbar-header page-scroll"><button area-expanded="false" data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button" class="navbar-toggle collapsed"><span class="sr-only">TOggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/" class="navbar-brand">Eugene Krevenets&nbsp; &middot; &nbsp;<small>profile</small></a></div><div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse"><ul class="nav navbar-nav navbar-right"><li><a href="/#projects">Projects</a></li><li><a href="/#contacts">Contacts</a></li></ul></div></div></nav><header class="bg-primary text-center"><div class="container"><div class="row"><div class="col-lg-12"><img src="/images/projects/darlingjs-256x256-2.jpg" width="256" height="256" class="img-responsive header-image"></div></div><div class="row"><div class="col-sm-1 hidden-xs"><a href="/projects/clipping" class="project-previous-arrow"><i class="fa fa-angle-double-left"></i></a></div><div class="col-sm-10"><div class="intro-text"><span class="name">darling.js</span><hr class="star-light-on-primary"><span class="description"><span>gamedev</span> &middot<span> </span><span>javascript</span></span></div></div><div class="col-sm-1 hidden-xs"><a href="/projects/jasmine-es6-generator" class="project-next-arrow"><i class="fa fa-angle-double-right"></i></a></div></div><div class="row visible-xs"><div class="col-xs-6 text-right"><a href="/projects/clipping" class="project-previous-arrow"><i class="fa fa-angle-double-left"></i></a></div><div class="col-xs-6 text-left"><a href="/projects/jasmine-es6-generator" class="project-next-arrow"><i class="fa fa-angle-double-right"></i></a></div></div></div></header><article class="container"><br><section class="row"><div class="col-xs-6 text-right"><iframe src="https://ghbtns.com/github-btn.html?user=darlingjs&amp;repo=darlingjs&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe></div><div class="col-xs-6 text-left"><iframe src="https://ghbtns.com/github-btn.html?user=darlingjs&amp;repo=darlingjs&amp;type=watch&amp;count=true&amp;size=large&amp;v=2" frameborder="0" scrolling="0" width="160px" height="30px"></iframe></div></section><div class="row"><div class="col-lg-12 text-center"><p><p>Lightweight entity, component, system based game engine. With flexible architecture. Decupled from any dependecy. So all interaction with Box2D, Render system, Particle System and so on put in pluggable modules. Use fluent API Crafty.js, jQuery like.</p>
-</p></div></div><div class="row"><div class="col-xs-6 text-right"><a href="/" class="btn btn-default"><i class="fa fa-chevron-up"></i>&nbsp; back</a></div><div class="col-xs-6 text-left"><a href="http://darlingjs.github.io" target="_blank" class="btn btn-danger">try it &nbsp;<i class="fa fa-cube"></i></a></div></div></article><div class="container"><div class="row"><div class="col-lg-12 text-center"><hr class="star-primary"></div></div></div><footer class="text-center"><div class="footer-above"><div class="container"><div class="footer-col"><div data-href="https://www.facebook.com/hyzhak.github.io" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true" class="fb-like"></div><ul class="list-inline"><li><a href="http://facebook.com/hyzhak.github.io" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a></li><li><a href="http://twitter.com/hyzhak_en" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a></li><li><a href="https://linkedin.com/in/eugenekrevenets" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-linkedin"></i></a></li><li><a href="https://github.com/hyzhak" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-github"></i></a></li></ul></div></div></div><div id="contacts" class="footer-below"><span>Based on Bootswatch theme -<a href="http://bootswatch.com/flatly/" target="_blank">flatly</a> and&nbsp;<a href="https://github.com/ironsummitmedia/startbootstrap-freelancer/" target="_blank">startbootstrap-freelancer</a>&nbsp;of ironsummitmedia<a href="https://github.com/hyzhak/hyzhak.github.io-source" target="_blank">sources</a></span><div>(C) hyzhak 2015</div></div></footer><script src="http://code.jquery.com/jquery-2.1.4.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><div id="fb-root"></div><script>(function (d, s, id, appid) {
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>darling.js</title><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta name="description"><meta name="keywords" content="game dev, javascript, node.js, python, opensource"><meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"><meta name="google-site-verification" content="-WuDSQXcQ3LYVkL0N9vaxK-5xrxXS4I-nB9t5qreNjU"><link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"><link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"><link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.4/flatly/bootstrap.min.css" rel="stylesheet"><link href="/css/main.css" rel="stylesheet"></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-shrink"><div class="container-fluid"><div class="navbar-header page-scroll"><button area-expanded="false" data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button" class="navbar-toggle collapsed"><span class="sr-only">TOggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/" class="navbar-brand">Eugene Krevenets&nbsp; &middot; &nbsp;<small>profile</small></a></div><div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse"><ul class="nav navbar-nav navbar-right"><li><a href="/#projects">Projects</a></li><li><a href="/#contacts">Contacts</a></li></ul></div></div></nav><header class="bg-primary text-center"><div class="container"><div class="row"><div class="col-lg-12"><img src="/images/projects/darlingjs-256x256-2.jpg" width="256" height="256" class="img-responsive header-image"></div></div><div class="row"><div class="col-sm-1 hidden-xs"></div><div class="col-sm-10"><div class="intro-text"><span class="name">darling.js</span><hr class="star-light-on-primary"><span class="description"><span>asm.js</span> &middot<span> </span><span>box2</span> &middot<span> </span><span>gamedev</span> &middot<span> </span><span>grunt</span> &middot<span> </span><span>jasmine</span> &middot<span> </span><span>javascript</span> &middot<span> </span><span>pixi.js</span> &middot<span> </span><span>q</span> &middot<span> </span><span>webgl</span></span></div></div><div class="col-sm-1 hidden-xs"><a href="/projects/clipping" class="project-next-arrow"><i class="fa fa-angle-double-right"></i></a></div></div><div class="row visible-xs"><div class="col-xs-6 text-right"></div><div class="col-xs-6 text-left"><a href="/projects/clipping" class="project-next-arrow"><i class="fa fa-angle-double-right"></i></a></div></div><div class="row text-center"><div class="col-xs-12 try-it"><a href="http://darlingjs.github.io" target="_blank" class="btn btn-danger">try it &nbsp;<i class="fa fa-cube"></i></a></div></div></div></header><article class="container"><br><section class="row"><div class="col-xs-6 text-right"><iframe src="https://ghbtns.com/github-btn.html?user=darlingjs&amp;repo=darlingjs&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe></div><div class="col-xs-6 text-left"><iframe src="https://ghbtns.com/github-btn.html?user=darlingjs&amp;repo=darlingjs&amp;type=watch&amp;count=true&amp;size=large&amp;v=2" frameborder="0" scrolling="0" width="160px" height="30px"></iframe></div></section><div class="row"><div class="col-lg-12"><p><h1 id="darlingjs-build-status-https-travis-ci-org-darlingjs-darlingjs-png-branch-master-https-travis-ci-org-darlingjs-darlingjs-gitter-https-badges-gitter-im-join-chat-svg-https-gitter-im-darlingjs-heart-utm_source-badge-utm_medium-badge-utm_campaign-pr-badge-utm_content-badge-">darlingjs <a href="https://travis-ci.org/darlingjs/darlingjs"><img src="https://travis-ci.org/darlingjs/darlingjs.png?branch=master" alt="Build Status"></a> <a href="https://gitter.im/darlingjs/heart?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join Chat.svg" alt="Gitter"></a></h1>
+<p><img src="http://darlingjs.github.io/images/logo-oldschool.png" alt="Logo"></p>
+<p>Lightweight entity, component, system based game engine. With flexible architecture. Decupled from any dependecy. So all interaction with Box2D, Render system, Particle System and so on put in pluggable modules. Use fluent API <a href="craftyjs.com">Crafty.js</a>, <a href="http://jquery.com">jQUery</a> like.</p>
+<h2 id="support">Support</h2>
+<ul>
+<li><a href="http://darlingjs.github.io/docs/">documentation</a></li>
+<li><a href="https://plus.google.com/communities/100075954096144611101">forum</a></li>
+</ul>
+<h2 id="examples">Examples</h2>
+<ul>
+<li><a href="http://darlingjs.github.io/games/game-of-pong/">Game of Pong</a> with <a href="https://github.com/darlingjs/darlingjs-examples/blob/master/game-of-pong/">sources</a>;</li>
+<li><a href="http://darlingjs.github.io/games/cabriolet/"><em>In Progress</em> Red Cabrioler</a> with <a href="https://github.com/darlingjs/darlingjs-examples/tree/master/red-cabriolet/">sources</a>;</li>
+<li><a href="https://github.com/darlingjs/darlingjs-examples/">Repo with other sources</a>;</li>
+</ul>
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="creating-the-world">Creating the World</h3>
+<p>Create the World for Box2D experiments</p>
+<pre><code class="lang-javascript">
+var world = darlingjs.world(&#39;myGame&#39;, [
+    //inject some modules
+
+    //get 2D components
+    &#39;ngFlatland&#39;,
+
+    //get Common Physics components
+    &#39;ngPhysics&#39;,
+
+    //get Box2D implementation of Physics components
+    &#39;ngBox2DEmscripten&#39;
+], {
+    fps: 60
+});
+</code></pre>
+<p><em>DarlingJS is lightweight framework so it&#39;s decoupled from any rendering, physics, sound, assets and so on libraries. And it possible to develop on pure javascript with your own simulation systems.</em></p>
+<p><em>Every darlingjs modules start with prefix &#39;ng&#39;, for example: &#39;ngPhysics&#39;.</em></p>
+<h3 id="add-systems">Add systems</h3>
+<p>add physics simulation system</p>
+<pre><code class="lang-javascript">world.$add(&#39;ngBox2DSystem&#39;, {
+    //define gravity of box2d world
+    gravity: {
+        x: 0,
+        y: 9.8
+    },
+
+    //define properties of physics simulation
+    velocityIterations: 3,    
+    positionIterations: 3
+});
+</code></pre>
+<p>add view port system for definition 2D camera position</p>
+<pre><code class="lang-javascript">world.$add(&#39;ng2DViewPort&#39;, {
+    //centor of the camera
+    lookAt: {
+        x: width / 2, y: height / 2
+    },
+
+    //size of the camera view
+    width: width,
+    height: height
+});
+</code></pre>
+<p>add box2d debug draw visualization</p>
+<pre><code class="lang-javascript">world.$add(&#39;ngBox2DDebugDraw&#39;, {
+    //target div/convas element. For div element automaticaly create canvas element and place into the div
+    domID: &#39;gameView&#39;, 
+
+    //size of canvas
+    width: width, height: height
+});
+</code></pre>
+<p>add drugging support system. </p>
+<pre><code>world.$add(&#39;ngBox2DDraggable&#39;, { 
+    //target div/convas element
+    domId: &#39;gameView&#39;, 
+
+    //width, height of it
+    width: width, height: height 
+});
+</code></pre><h3 id="create-entity">Create Entity</h3>
+<p>Create entity of draggable box and add it to the world</p>
+<pre><code class="lang-javascript">
+darlingjs.$e(&#39;box&#39;, {
+//define position
+    ng2D: {
+        x: 0.0,
+        y: 0.0
+    },
+
+//define size of
+    ng2DSize: {
+        width: 10.0,
+        height: 10.0
+    },
+
+//mark entity as physics object
+    ngPhysics: {},
+
+//mark entity as draggable object
+    ngDraggable: {}
+});
+</code></pre>
+<p><em>Here is alternative notation: When you have a lot of components in default state, it useful to count of components by array</em></p>
+<pre><code class="lang-javascript">
+darlingjs.$e(&#39;box&#39;, [&#39;ng2D&#39;, &#39;ng2DSize&#39;, &#39;ngPhysics&#39;, &#39;ngDraggable&#39;]}
+</code></pre>
+<h3 id="start-the-game">Start The Game</h3>
+<p>To run update of game the world 60 times in second just use:</p>
+<pre><code class="lang-javascript">world.$start();
+</code></pre>
+<p>One frame emulation:</p>
+<pre><code class="lang-javascript">world.$update(1/60);
+</code></pre>
+<h3 id="create-custom-system-with-custom-component">Create custom system with custom component</h3>
+<p>Create system that automaticaly increase life of any entities with &#39;ngLife&#39; and &#39;lifeHealer&#39; components. So you if you want to heal some entity you can just add &#39;lifeHealer&#39; component to it.</p>
+<h4 id="usage">Usage</h4>
+<pre><code class="lang-javascript">//start healing entity
+
+entity.$add(&#39;healer&#39;);
+
+//stop healing entity
+
+entity.$remove(&#39;healer&#39;);
+</code></pre>
+<h4 id="define-component-and-system">Define component and system</h4>
+<pre><code class="lang-javascript">
+//define healer component
+
+world.$c(&#39;healer&#39;, { 
+    power: 0.1,
+    maxLife: 100.0
+});
+
+//define and add healer system to the game world
+//!ATTENTION! in next verstion $node and $nodes will be changed to the $entity and $entities
+
+world.$s(&#39;healerSystem&#39;, {
+
+    //apply to components:
+    $require: [&#39;ngLife&#39;, &#39;healer&#39;],
+
+    //iterate each frame for each entity
+    $update: [&#39;$node&#39;, function($node) {
+        if ($node.ngLife.life &lt;= this.healer.maxLife) {
+            //heals entity
+            $node.ngLife.life += this.healer.power;
+        } else {
+            //stop healing when life reach of maxLife
+            $node.$remove(&#39;healer&#39;);
+        }
+    }]
+});
+</code></pre>
+<h2 id="inspired-by">Inspired by</h2>
+<ul>
+<li><a href="http://angularjs.org">AngularJs</a> - dependecy injections;</li>
+<li><a href="http://ashframework.org">Ash</a> - component, entity, system architecture;</li>
+<li><a href="http://craftyjs.com">CraftyJS</a> - fluent api;</li>
+</ul>
+<h2 id="pluggable-darlingjs-modules">Pluggable darlingjs Modules</h2>
+<ul>
+<li>2D Renderering <a href="http://www.goodboydigital.com/pixi-js-is-out/">uses pixi.js</a>;</li>
+<li>Physics <a href="https://github.com/kripken/box2d.js/">uses emscripted box2d 2.2.1</a> or <a href="https://code.google.com/p/box2dweb/">box2dweb 2.1a</a>;</li>
+<li>Performance (FPS/Mem) metter <a href="https://github.com/mrdoob/stats.js">uses Stats.js</a>;</li>
+<li>Flatland (2D components);</li>
+<li>Generators (systems of procedural generation of infinity world);</li>
+<li>Particles (systems and components for emitting particles);</li>
+<li>Player (components for store player state: score, life);</li>
+</ul>
+<h3 id="comming-soon-modules">Comming soon Modules</h3>
+<ul>
+<li>Advanced Particle System;</li>
+<li>AI</li>
+<li>FlashJS, EaselJS Rendering;</li>
+<li>Sound;</li>
+<li>and so on.</li>
+</ul>
+<h2 id="example-of-usage">Example of Usage</h2>
+<p>Game Engine now in active developing and here is just proof of concept.</p>
+<pre><code class="lang-javascript">
+var world = darlingjs.world(&#39;myGame&#39;, [&#39;ngModule&#39;, &#39;flatWorld&#39;], {
+    fps: 60
+});
+
+world.$add(&#39;ngDOMSystem&#39;, { targetId: &#39;gameID&#39; });
+world.$add(&#39;ngFlatControlSystem&#39;);
+world.$add(&#39;ng2DCollisionSystem&#39;);
+
+world.$e(&#39;player&#39;, [
+    &#39;ngDOM&#39;, { color: &#39;rgb(255,0,0)&#39; },
+    &#39;ng2D&#39;, {x : 0, y: 50},
+    &#39;ngControl&#39;,
+    &#39;ngCollision&#39;
+]);
+
+for (var i = 0, l = 10; i &lt; l; i++) {
+    var fixed = Math.random() &gt; 0.5;
+    world.$e(&#39;obstacle_&#39; + i, [
+        &#39;ngDOM&#39;, { color: fixed?&#39;rgb(0, 255, 0)&#39;:&#39;rgb(200, 200, 0)&#39;},
+        &#39;ng2D&#39;, {x : 10 + 80 * Math.random(), y: 10 + 80 * Math.random()},
+        &#39;ngCollision&#39;, {fixed: fixed}
+    ]);
+}
+
+world.$e(&#39;goblin&#39;, [
+    &#39;ngDOM&#39;, { color: &#39;rgb(255,0,0)&#39; },
+    &#39;ng2D&#39;, {x : 99, y: 50},
+    &#39;ngRamble&#39;, {frame: {
+        left: 50, right: 99,
+        top: 0, bottom: 99
+    }},
+    &#39;ngScan&#39;, {
+        radius: 3,
+        target: &#39;ngPlayer&#39;,
+        switchTo: {
+            e:&#39;ngAttack&#39;,
+            params: {
+                switchTo:&#39;ngRamble&#39;
+            }
+        }
+    },
+    &#39;ngCollision&#39;
+]);
+
+world.$start();
+</code></pre>
+<h2 id="create-module">Create Module</h2>
+<pre><code class="lang-javascript">
+var ngModule = darlingjs.module(&#39;ngModule&#39;);
+
+ngModule.$c(&#39;ngCollision&#39;, {
+    fixed: false
+});
+
+ngModule.$c(&#39;ngScan&#39;, {
+    target: &#39;ngPlayer&#39;
+});
+
+ngModule.$c(&#39;ngRamble&#39;, {
+    frame: {
+        left: 0, right: 0,
+        top: 0, bottom: 0
+    }
+});
+
+ngModule.$c(&#39;ngPlayer&#39;, {
+});
+
+ngModule.$c(&#39;ngDOM&#39;, {
+    color: &#39;rgb(255,0,0)&#39;
+});
+
+ngModule.$c(&#39;ng2D&#39;, {
+    x: 0.0,
+    y: 0.0,
+    width: 10.0,
+    height: 10.0
+});
+
+ngModule.$c(&#39;ngControl&#39;, {
+    speed: 10,
+    keys:{ UP_ARROW: -90, DOWN_ARROW: 90, RIGHT_ARROW: 0, LEFT_ARROW: 180}
+});
+
+ngModule.$system(&#39;ng2DRamble&#39;, {
+
+    $require: [&#39;ngRamble&#39;, &#39;ng2D&#39;],
+
+    _updateTarget: function($node) {
+        $node._target = {
+            x: 4 * Math.random() - 2,
+            y: 4 * Math.random() - 2
+        };
+
+        $node._target = this._normalizePosition($node._target, $node.frame);
+    },
+
+    _normalizePosition: function(p, frame) {
+        if (p.x &lt; frame.left) {
+            p.x = frame.left;
+        }
+
+        if (p.x &gt; frame.right) {
+            p.x = frame.right;
+        }
+
+        if (p.y &lt; frame.top) {
+            p.y = frame.top;
+        }
+
+        if (p.y &gt; frame.bottom) {
+            p.y = frame.bottom;
+        }
+    },
+
+    _distanceSqr: function(p1, p2) {
+        var dx = p1.x - p2.x;
+        var dy = p1.y - p2.y;
+        return dx * dx + dy * dy;
+    },
+
+    $update: [&#39;$node&#39;, function($node) {
+        if (!$node._target) {
+            this._updateTarget($node);
+        } else if (this._distanceSqr($node.ng2D, $node._target) &lt; 1) {
+            this._updateTarget($node);
+        } else {
+            var dx = Math.abs($node._target.x - $node.ng2D.x);
+            var dy = Math.abs($node._target.y - $node.ng2D.y);
+            if (dx &gt; dy) {
+                $node.ng2D.x+= $node._target.x &gt; $node.ng2D.x?1:-1;
+            } else {
+                $node.ng2D.y+= $node._target.y &gt; $node.ng2D.y?1:-1;
+            }
+        }
+    }]
+})
+
+ngModule.$system(&#39;ng2DCollisionSystem&#39;, {
+
+    $require: [&#39;ngCollision&#39;, &#39;ng2D&#39;],
+
+    _isLeftCollision: function(p1, p2) {
+        return false;
+    },
+
+    _isRightCollision: function(p1, p2) {
+        return false;
+    },
+
+    _isTopCollision: function(p1, p2) {
+        return false;
+    },
+
+    _isBottomCollision: function(p1, p2) {
+        return false;
+    },
+
+    $update: [&#39;$nodes&#39;, function($nodes) {
+        //TODO brute-force. just push away after collision
+        for (var j = 0, lj = $nodes.length; j &lt; lj; j++) {
+            for ( var i = 0, li = $nodes.length; i &lt; li; i++) {
+                var node1p = $nodes[i].ng2D;
+                var node2p = $nodes[j].ng2D;
+                var node1Fixed = $nodes[i].ngCollision.fixed;
+                var node2Fixed = $nodes[j].ngCollision.fixed;
+
+                if (this._isLeftCollision(node1p, node2p)) {
+                    //TODO shift nodes based on
+                    node1Fixed, node2Fixed;
+                } else if (this._isRightCollision(node1p, node2p)) {
+                    //TODO shift nodes based on
+                    node1Fixed, node2Fixed;
+                } else if (this._isTopCollision(node1p, node2p)) {
+                    //TODO shift nodes based on
+                    node1Fixed, node2Fixed;
+                } else if (this._isBottomCollision(node1p, node2p)) {
+                    //TODO shift nodes based on
+                    node1Fixed, node2Fixed;
+                }
+            }
+        }
+    }]
+});
+
+ngModule.$system(&#39;ng2DScan&#39;, {
+    $require: [&#39;ng2D&#39;, &#39;ngScan&#39;],
+
+    $update : [&#39;$nodes&#39;, function($nodes) {
+        //TODO brute-force. just push away after collision
+        for (var j = 0, lj = $nodes.length; j &lt; lj; j++) {
+            for ( var i = 0, li = $nodes.length; i &lt; li; i++) {
+
+            }
+        }
+    }]
+})
+
+ngModule.$system(&#39;ngControlSystem&#39;, {
+    $require: [&#39;ng2D&#39;, &#39;ngControl&#39;],
+
+    _targetElementID: &#39;game&#39;,
+
+    _target:null,
+
+    _actions: {},
+
+    _keyBinding: [],
+
+    _keyBind: function(keyId, action) {
+        this._keyBinding[keyId] = action;
+        this._actions[action] = false;
+    },
+
+    $added: function() {
+        this._keyBind(87, &#39;move-up&#39;);
+        this._keyBind(65, &#39;move-left&#39;);
+        this._keyBind(83, &#39;move-down&#39;);
+        this._keyBind(68, &#39;move-right&#39;);
+
+        this._target = document.getElementById(this._targetElementID);
+        var self = this;
+        this._target.addEventListener(&#39;keydown&#39;, function(e) {
+            var action = self._keyBinding[e.keyID];
+            if (action) {
+                self._actions[action] = true;
+            }
+        });
+        this._target.addEventListener(&#39;keyup&#39;, function(e) {
+            var action = self._keyBinding[e.keyID];
+            if (action) {
+                self._actions[action] = false;
+            }
+        });
+    },
+    _speed: {x:0.0, y:0.0},
+    _normalize: function(speed) {
+        //TODO : ...
+    },
+
+    $update: [&#39;$node&#39;, &#39;$time&#39;, &#39;$world&#39;, function($node, $time, $world) {
+        var speed = this._speed;
+        if (this._actions[&#39;move-up&#39;]) {
+            speed.y = -1.0;
+        }
+        if (this._actions[&#39;move-down&#39;]) {
+            speed.y = +1.0;
+        }
+        if (this._actions[&#39;move-left&#39;]) {
+            speed.x = -1.0;
+        }
+        if (this._actions[&#39;move-right&#39;]) {
+            speed.x = +1.0;
+        }
+
+        this._normalize(speed);
+
+        $node.ng2D.x += speed.x * $time * $world.fps;
+        $node.ng2D.y += speed.y * $time * $world.fps;
+    }]
+});
+
+ngModule.$system(&#39;ngDOMSystem&#39;, {
+    _targetElementID: &#39;game&#39;,
+
+    _target: null,
+
+    _element: null,
+
+    _style: null,
+
+    $require: [&#39;ngDOM&#39;, &#39;ng2D&#39;],
+
+    $added: function() {
+        if (this.target === null &amp;&amp; this.targetId !== null) {
+            this.target = document.getElementById(this.targetId);
+        }
+    },
+
+    $addNode: function($node) {
+        var element = document.createElement(&quot;div&quot;);
+        var style = element.style;
+
+        style.position = &quot;absolute&quot;;
+
+        $node._style = style;
+        $node._element = element;
+        this._target.appendChild(element);
+    },
+
+    $removeNode: function($node) {
+        //TODO:
+        this._target.removeChild($node._element);
+    },
+
+    $update: [&#39;$node&#39;, function($node) {
+        var style = $node._style;
+        style.left = $node.ng2D.x + &#39;px&#39;;
+        style.top = $node.ng2D.y + &#39;px&#39;;
+    }]
+});
+</code></pre>
+<h2 id="copyrights">Copyrights</h2>
+<p>Logo by Alena Krevenets (Burenka) <a href="http://burenkaz.daportfolio.com/">http://burenkaz.daportfolio.com/</a></p>
+<p><a href="https://bitdeli.com/free" title="Bitdeli Badge"><img src="https://d2weczhvl823v0.cloudfront.net/darlingjs/darlingjs/trend.png" alt="Bitdeli Badge"></a></p>
+</p></div></div><div class="row"><div class="col-xs-6 text-right"><a href="/#projects" class="btn btn-default"><i class="fa fa-chevron-left"></i>&nbsp; back</a></div><div class="col-xs-6 text-left"><a href="http://darlingjs.github.io" target="_blank" class="btn btn-danger">try it &nbsp;<i class="fa fa-cube"></i></a></div></div></article><div class="container"><div class="row"><div class="col-lg-12 text-center"><hr class="star-primary"></div></div></div><footer class="text-center"><div class="footer-above"><div class="container"><div class="footer-col"><div data-href="https://www.facebook.com/hyzhak.github.io" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true" class="fb-like"></div><ul class="list-inline"><li><a href="http://facebook.com/hyzhak.github.io" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a></li><li><a href="http://twitter.com/hyzhak_en" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a></li><li><a href="https://linkedin.com/in/eugenekrevenets" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-linkedin"></i></a></li><li><a href="https://github.com/hyzhak" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-github"></i></a></li></ul></div></div></div><div id="contacts" class="footer-below"><span>Based on Bootswatch theme -<a href="http://bootswatch.com/flatly/" target="_blank">flatly</a> and&nbsp;<a href="https://github.com/ironsummitmedia/startbootstrap-freelancer/" target="_blank">startbootstrap-freelancer</a>&nbsp;of ironsummitmedia<a href="https://github.com/hyzhak/hyzhak.github.io-source" target="_blank">sources</a></span><div>(C) hyzhak 2015</div></div></footer><script src="http://code.jquery.com/jquery-2.1.4.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script><div id="fb-root"></div><script>(function (d, s, id, appid) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s);

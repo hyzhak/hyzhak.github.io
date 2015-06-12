@@ -21,6 +21,10 @@ header .header-image {
   border-style: double;
   display: initial;
 }
+header .try-it {
+  margin-bottom: -40px;
+  margin-top: 40px;
+}
 footer {
   color: #fff;
 }
