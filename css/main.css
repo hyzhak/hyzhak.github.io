@@ -25,6 +25,10 @@ header .try-it {
   margin-bottom: -40px;
   margin-top: 40px;
 }
+#about {
+  color: white;
+  padding: 40px 0;
+}
 footer {
   color: #fff;
 }
